@@ -80,6 +80,26 @@ body.dark-mode {
     box-shadow: 0 0 20px var(--neon-green);
 }
 
+.whatsapp-btn {
+    border-color: #25D366;
+    color: #25D366;
+    box-shadow: 0 0 5px #25D366;
+}
+
+.whatsapp-btn:hover {
+    background: #25D366;
+    color: white;
+    box-shadow: 0 0 20px #25D366;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+}
+
 /* Intro Awareness Box */
 .awareness-box {
     background: rgba(255, 255, 255, 0.05);

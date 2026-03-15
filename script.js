@@ -34,6 +34,7 @@ const pulseOverlay = document.getElementById('pulse-overlay');
 // Buttons
 document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('next-btn').addEventListener('click', nextLevel);
+document.getElementById('whatsapp-share-btn').addEventListener('click', shareOnWhatsApp);
 document.getElementById('restart-btn').addEventListener('click', () => {
     currentLevel = 0;
     score = 0;
@@ -43,6 +44,17 @@ document.getElementById('restart-btn').addEventListener('click', () => {
 function startGame() {
     showScreen('game-screen');
     loadLevel(currentLevel);
+}
+
+function shareOnWhatsApp() {
+    const levelStr = currentLevel + 1;
+    const scoreStr = score;
+    const githubLink = "https://github.com/snr-project/anti-alzheimer"; // Buraya gerçek linkinizi ekleyebilirsiniz
+    
+    const message = `🧠 Zihnimi SNR ile güçlendiriyorum!\nAnti-Alzheimer oyununda ${levelStr}. seviyeye ulaştım ve ${scoreStr} puan topladım!\nBakalım sen beni geçebilecek misin?\nHemen dene: ${githubLink}`;
+    
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
 }
 
 function loadLevel(levelIndex) {
@@ -154,7 +166,9 @@ function endLevel(success) {
         const message = document.getElementById('result-message');
         const nextBtn = document.getElementById('next-btn');
         const restartBtn = document.getElementById('restart-btn');
+        const whatsappBtn = document.getElementById('whatsapp-share-btn');
         
+        document.getElementById('final-level').textContent = currentLevel + 1;
         document.getElementById('final-time').textContent = levels[currentLevel].time - timeLeft;
         document.getElementById('final-score').textContent = score;
         
@@ -164,17 +178,20 @@ function endLevel(success) {
                 message.textContent = "Tüm seviyeleri tamamlayarak zihnini en üst seviyeye taşıdın! (by SNR)";
                 nextBtn.classList.add('hidden');
                 restartBtn.classList.remove('hidden');
+                whatsappBtn.classList.remove('hidden');
             } else {
                 title.textContent = "Harika!";
                 message.textContent = `${currentLevel + 1}. Seviyeyi başarıyla tamamladın.`;
                 nextBtn.classList.remove('hidden');
                 restartBtn.classList.add('hidden');
+                whatsappBtn.classList.remove('hidden');
             }
         } else {
             title.textContent = "Süre Doldu!";
             message.textContent = "Zihnini biraz daha dinlendirip tekrar dene.";
             nextBtn.classList.add('hidden');
             restartBtn.classList.remove('hidden');
+            whatsappBtn.classList.remove('hidden'); // Kaybedince de paylaşabilsin
         }
     }, 500);
 }
