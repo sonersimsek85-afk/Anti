@@ -15,6 +15,8 @@
                 <p>Alzheimer hastalığı, zihinsel fonksiyonların kaybıyla karakterize edilen ilerleyici bir durumdur. Araştırmalar, düzenli zihin egzersizlerinin ve hafıza oyunlarının nöral bağlantıları koruyabileceğini ve zihni dinç tutabileceğini göstermektedir.</p>
                 <p class="highlight">Hafızanı zorla, zihnini güçlendir!</p>
             </div>
+            <!-- Name Input Area -->
+            <input type="text" id="player-name" placeholder="Adınızı Yazın..." class="neon-input" maxlength="20">
             <button id="start-btn" class="neon-btn">Zihnimi Güçlendirmeye Hazırım</button>
             <div class="signature">by SNR</div>
         </div>
@@ -30,18 +32,19 @@
             <div id="game-board" class="game-board"></div>
         </div>
 
-        <!-- Game Over / Level Up Screen -->
+        <!-- Result Screen -->
         <div id="result-screen" class="screen">
             <h2 id="result-title" class="neon-text">Harika!</h2>
             <p id="result-message">Seviyeyi başarıyla tamamladın.</p>
             <div class="stats">
-                <p>Ulaşılan Seviye: <span id="final-level">1</span></p>
+                <p>Oyuncu: <span id="display-player-name">-</span></p>
+                <p>Seviye: <span id="final-level">1</span></p>
                 <p>Süre: <span id="final-time">0</span>s</p>
                 <p>Toplam Skor: <span id="final-score">0</span></p>
             </div>
             <div class="action-buttons">
                 <button id="next-btn" class="neon-btn">Sonraki Seviye</button>
-                <button id="whatsapp-share-btn" class="neon-btn whatsapp-btn">WhatsApp'ta Paylaş</button>
+                <button id="whatsapp-share-btn" class="neon-btn whatsapp-btn">Skorumu Paylaş</button>
                 <button id="restart-btn" class="neon-btn hidden">Yeniden Dene</button>
             </div>
             <div class="signature">by SNR</div>

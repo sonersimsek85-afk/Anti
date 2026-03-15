@@ -20,6 +20,7 @@ let timeLeft;
 let flippedCards = [];
 let matchedPairs = 0;
 let isGameActive = false;
+let playerName = "";
 
 // DOM Elements
 const introScreen = document.getElementById('intro-screen');
@@ -30,9 +31,19 @@ const timerDisplay = document.getElementById('timer-display');
 const scoreDisplay = document.getElementById('score-display');
 const levelDisplay = document.getElementById('level-display');
 const pulseOverlay = document.getElementById('pulse-overlay');
+const playerNameInput = document.getElementById('player-name');
 
 // Buttons
-document.getElementById('start-btn').addEventListener('click', startGame);
+document.getElementById('start-btn').addEventListener('click', () => {
+    playerName = playerNameInput.value.trim();
+    if (!playerName) {
+        alert("Lütfen bir isim girin!");
+        playerNameInput.focus();
+        return;
+    }
+    startGame();
+});
+
 document.getElementById('next-btn').addEventListener('click', nextLevel);
 document.getElementById('whatsapp-share-btn').addEventListener('click', shareOnWhatsApp);
 document.getElementById('restart-btn').addEventListener('click', () => {
@@ -49,9 +60,8 @@ function startGame() {
 function shareOnWhatsApp() {
     const levelStr = currentLevel + 1;
     const scoreStr = score;
-    const githubLink = "https://github.com/snr-project/anti-alzheimer"; // Buraya gerçek linkinizi ekleyebilirsiniz
-    
-    const message = `🧠 Zihnimi SNR ile güçlendiriyorum!\nAnti-Alzheimer oyununda ${levelStr}. seviyeye ulaştım ve ${scoreStr} puan topladım!\nBakalım sen beni geçebilecek misin?\nHemen dene: ${githubLink}`;
+    // Updated WhatsApp message template
+    const message = `Zihnimi SNR ile güçlendiriyorum! ${playerName}, ${scoreStr} puan ile ${levelStr}. seviyeye ulaştı! by SNR`;
     
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -79,7 +89,7 @@ function generateBoard(pairCount) {
     const gameSymbols = [...levelSymbols, ...levelSymbols];
     shuffle(gameSymbols);
     
-    // Adjust grid columns based on pair count
+    // Grid sizing
     let cols = 2;
     if (pairCount > 15) cols = 8;
     else if (pairCount > 8) cols = 6;
@@ -116,7 +126,7 @@ function checkMatch() {
     
     if (card1.symbol === card2.symbol) {
         matchedPairs++;
-        score += 10 + (currentLevel * 5);
+        score += (currentLevel + 1) * 10;
         scoreDisplay.textContent = score;
         
         card1.card.classList.add('matched');
@@ -124,7 +134,6 @@ function checkMatch() {
         
         createParticles(card2.card);
         playPositiveSound();
-        
         flippedCards = [];
         
         if (matchedPairs === levels[currentLevel].pairs) {
@@ -135,7 +144,7 @@ function checkMatch() {
             card1.card.classList.remove('flipped');
             card2.card.classList.remove('flipped');
             flippedCards = [];
-        }, 1000);
+        }, 800);
     }
 }
 
@@ -145,7 +154,7 @@ function startTimer() {
         timeLeft--;
         timerDisplay.textContent = timeLeft;
         
-        if (timeLeft <= 5) {
+        if (timeLeft <= 5 && timeLeft > 0) {
             pulseOverlay.classList.add('pulse-active');
         }
         
@@ -166,32 +175,29 @@ function endLevel(success) {
         const message = document.getElementById('result-message');
         const nextBtn = document.getElementById('next-btn');
         const restartBtn = document.getElementById('restart-btn');
-        const whatsappBtn = document.getElementById('whatsapp-share-btn');
         
+        document.getElementById('display-player-name').textContent = playerName;
         document.getElementById('final-level').textContent = currentLevel + 1;
         document.getElementById('final-time').textContent = levels[currentLevel].time - timeLeft;
         document.getElementById('final-score').textContent = score;
         
         if (success) {
             if (currentLevel === levels.length - 1) {
-                title.textContent = "TEBRİKLER!";
-                message.textContent = "Tüm seviyeleri tamamlayarak zihnini en üst seviyeye taşıdın! (by SNR)";
+                title.textContent = "MUHTEŞEM!";
+                message.textContent = "Tüm seviyeleri tamamlayarak zihnini zirveye taşıdın!";
                 nextBtn.classList.add('hidden');
                 restartBtn.classList.remove('hidden');
-                whatsappBtn.classList.remove('hidden');
             } else {
-                title.textContent = "Harika!";
-                message.textContent = `${currentLevel + 1}. Seviyeyi başarıyla tamamladın.`;
+                title.textContent = "Tebrikler!";
+                message.textContent = `${currentLevel + 1}. Seviyeyi başarıyla geçtin.`;
                 nextBtn.classList.remove('hidden');
                 restartBtn.classList.add('hidden');
-                whatsappBtn.classList.remove('hidden');
             }
         } else {
-            title.textContent = "Süre Doldu!";
-            message.textContent = "Zihnini biraz daha dinlendirip tekrar dene.";
+            title.textContent = "Zaman Doldu!";
+            message.textContent = "Hafızanı biraz daha odaklayıp tekrar denemelisin.";
             nextBtn.classList.add('hidden');
             restartBtn.classList.remove('hidden');
-            whatsappBtn.classList.remove('hidden'); // Kaybedince de paylaşabilsin
         }
     }, 500);
 }
@@ -225,16 +231,15 @@ function createParticles(element) {
         
         const destinationX = (Math.random() - 0.5) * 200;
         const destinationY = (Math.random() - 0.5) * 200;
-        const rotation = Math.random() * 360;
         
         particle.style.left = `${centerX}px`;
         particle.style.top = `${centerY}px`;
         
         const animation = particle.animate([
             { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-            { transform: `translate(${destinationX}px, ${destinationY}px) scale(0) rotate(${rotation}deg)`, opacity: 0 }
+            { transform: `translate(${destinationX}px, ${destinationY}px) scale(0)`, opacity: 0 }
         ], {
-            duration: 800 + Math.random() * 400,
+            duration: 1000,
             easing: 'cubic-bezier(0, .9, .57, 1)'
         });
         
@@ -246,25 +251,13 @@ function playPositiveSound() {
     const context = new (window.AudioContext || window.webkitAudioContext)();
     const oscillator = context.createOscillator();
     const gainNode = context.createGain();
-    
     oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(440, context.currentTime); // A4
-    oscillator.frequency.exponentialRampToValueAtTime(880, context.currentTime + 0.1);
-    
+    oscillator.frequency.setValueAtTime(523.25, context.currentTime); // C5
+    oscillator.frequency.exponentialRampToValueAtTime(1046.50, context.currentTime + 0.1); // C6
     gainNode.gain.setValueAtTime(0.1, context.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
-    
     oscillator.connect(gainNode);
     gainNode.connect(context.destination);
-    
     oscillator.start();
     oscillator.stop(context.currentTime + 0.3);
-}
-
-// LocalStorage for High Scores
-function saveHighScore() {
-    const highScores = JSON.parse(localStorage.getItem('anti-alzheimer-scores') || '[]');
-    highScores.push({ score, date: new Date().toLocaleDateString() });
-    highScores.sort((a, b) => b.score - a.score);
-    localStorage.setItem('anti-alzheimer-scores', JSON.stringify(highScores.slice(0, 5)));
 }
