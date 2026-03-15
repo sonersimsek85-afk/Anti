@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Alzheimer | by SNR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+    <div id="app">
+        <!-- Intro Screen -->
+        <div id="intro-screen" class="screen active">
+            <h1 class="neon-text">Anti-Alzheimer</h1>
+            <div class="awareness-box">
+                <p>Alzheimer hastalığı, zihinsel fonksiyonların kaybıyla karakterize edilen ilerleyici bir durumdur. Araştırmalar, düzenli zihin egzersizlerinin ve hafıza oyunlarının nöral bağlantıları koruyabileceğini ve zihni dinç tutabileceğini göstermektedir.</p>
+                <p class="highlight">Hafızanı zorla, zihnini güçlendir!</p>
+            </div>
+            <button id="start-btn" class="neon-btn">Zihnimi Güçlendirmeye Hazırım</button>
+            <div class="signature">by SNR</div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <header>
+                <div class="hud-item">Seviye: <span id="level-display">1</span></div>
+                <div class="hud-item">Skor: <span id="score-display">0</span></div>
+                <div class="hud-item">Süre: <span id="timer-display">30</span>s</div>
+                <div class="signature-small">by SNR</div>
+            </header>
+            <div id="game-board" class="game-board"></div>
+        </div>
+
+        <!-- Game Over / Level Up Screen -->
+        <div id="result-screen" class="screen">
+            <h2 id="result-title" class="neon-text">Harika!</h2>
+            <p id="result-message">Seviyeyi başarıyla tamamladın.</p>
+            <div class="stats">
+                <p>Süre: <span id="final-time">0</span>s</p>
+                <p>Toplam Skor: <span id="final-score">0</span></p>
+            </div>
+            <button id="next-btn" class="neon-btn">Sonraki Seviye</button>
+            <button id="restart-btn" class="neon-btn hidden">Yeniden Dene</button>
+            <div class="signature">by SNR</div>
+        </div>
+    </div>
+    <div id="pulse-overlay"></div>
+    <script src="script.js"></script>
+</body>
+</html>
